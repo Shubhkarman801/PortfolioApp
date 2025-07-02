@@ -13,11 +13,19 @@ import insta from './assets/insta.png'
 import lin from './assets/lin.png'
 import git from './assets/git.png'
 import ExpandIconButton from './components/ExpandIconButton';
+import { useState, useEffect } from 'react';
+import Perloader from './components/Perloader';
 
-  
+
 
 const Home = (props) => {
+  
   const navigator = useNavigate();
+
+
+  
+  if(props.loading) return <Perloader/>;
+
   return (
     <div className="relative min-h-screen text-white flex flex-col items-center font-poppins">
       {/* Background Video */}
@@ -112,6 +120,7 @@ const Home = (props) => {
 };
 
 const About = (props) => {
+  
   const navigator = useNavigate();
   return(
   <div className="min-h-screen  text-white flex items-center justify-center">
@@ -148,16 +157,29 @@ const About = (props) => {
 };
 
 function App() {
+
+  const [loading,setLoading] = useState(true);
+
+    useEffect(() => {
+    const timer = setTimeout(()=>{
+      setLoading(false)
+    },6000)
+  
+    return () => {
+      clearTimeout(timer)
+    }
+  },[])
   
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Home />,
+      element: <Home loading = {loading} />,
     },
     {
       path: '/about',
       element: <About />,
     },
+    
   ]);
 
   return <RouterProvider router={router} />;
